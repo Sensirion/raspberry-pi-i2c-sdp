@@ -199,7 +199,7 @@ int16_t sdp_exit_sleep_mode(void) {
         return error;
     }
     sensirion_i2c_hal_sleep_usec(2000);
-    return error;
+    return NO_ERROR;
 }
 
 int16_t sdp_prepare_product_identifier(void) {
