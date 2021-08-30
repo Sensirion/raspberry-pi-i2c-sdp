@@ -39,6 +39,7 @@
 #include "sdp_i2c.h"
 #include "sensirion_common.h"
 #include "sensirion_i2c_hal.h"
+#include <inttypes.h>
 
 /*
  * TO USE CONSOLE OUTPUT (PRINTF) YOU MAY NEED TO ADAPT THE INCLUDE ABOVE OR
@@ -46,40 +47,54 @@
  * #define printf(...)
  */
 
-// TODO: DRIVER_GENERATOR Add missing commands and make prints more pretty
-
 int main(void) {
     int16_t error = 0;
 
     sensirion_i2c_hal_init();
 
-    uint32_t product_number;
-    uint8_t serial_number[8];
-    uint8_t serial_number_size = 8;
+    sdp_stop_continuous_measurement();
+    // ignore error if no measurement running
 
-    error = sdp_read_product_identifier(&product_number, serial_number,
+    uint32_t product_number;
+    const uint8_t serial_number_size = 8;
+    uint8_t serial_number_raw[serial_number_size];
+
+    error = sdp_prepare_product_identifier();
+    if (error) {
+        printf("Error executing sdp8xx_prepare_product_identifier(): %i\n",
+               error);
+    }
+
+    error = sdp_read_product_identifier(&product_number, serial_number_raw,
                                         serial_number_size);
 
     if (error) {
         printf("Error executing sdp_read_product_identifier(): %i\n", error);
     } else {
-        printf("Product number: %u\n", product_number);
-        printf("Serial number: ");
-        for (size_t i = 0; i < serial_number_size; i++) {
-            printf("%u, ", serial_number[i]);
-        }
-        printf("\n");
+        printf("Product number: 0x%08x\n", product_number);
+        uint64_t serial_number =
+            (uint64_t)serial_number_raw[0] << 56 | (uint64_t)serial_number_raw[1] << 48 |
+            (uint64_t)serial_number_raw[2] << 40 | (uint64_t)serial_number_raw[3] << 32 |
+            (uint64_t)serial_number_raw[4] << 24 | (uint64_t)serial_number_raw[5] << 16 |
+            (uint64_t)serial_number_raw[6] << 8 | (uint64_t)serial_number_raw[7];
+        printf("Serial Number: %" PRIu64 "\n", serial_number);
     }
 
     // Start Measurement
 
-    for (;;) {
-        // Read Measurement
-        // TODO: DRIVER_GENERATOR check and update measurement interval
-        sensirion_i2c_hal_sleep_usec(1000000);
-        // TODO: DRIVER_GENERATOR Add scaling and offset to printed measurement
-        // values
+    error =
+        sdp_start_continuous_measurement_with_diff_pressure_t_comp_and_averaging();
+    if (error) {
+        printf("Error executing "
+               "sdp_start_continuous_measurement_with_diff_pressure_t_comp_"
+               "and_averaging(): %i\n",
+               error);
+    }
 
+    for (int i =0; i < 10000; i++) {
+        // Read Measurement
+        sensirion_i2c_hal_sleep_usec(10000);
+        // values
         int16_t differential_pressure;
         int16_t temperature;
         int16_t scaling_factor;
@@ -94,6 +109,11 @@ int main(void) {
             printf("Temperature: %i\n", temperature);
             printf("Scaling factor: %i\n", scaling_factor);
         }
+    }
+
+    error = sdp_stop_continuous_measurement();
+    if (error) {
+        printf("Error executing sdp_stop_continuous_measurement(): %i\n", error);
     }
 
     return 0;
