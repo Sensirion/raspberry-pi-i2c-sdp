@@ -49,17 +49,15 @@ the following pins to connect your Sdp:
 
       Output:
       ```
-      Product number: 50465537
+      Product number: 0x03020b01
       Serial Number: 1902067650
-      Differential pressure: -51
-      Temperature: 5677
-      Scaling factor: 240
-      Differential pressure: -3
-      Temperature: 5677
-      Scaling factor: 240
-      Differential pressure: -7
-      Temperature: 5682
-      Scaling factor: 240
+      Differential pressure: -0.17 Pa
+      Temperature: 28.80 °C
+      Differential pressure: -0.03 Pa
+      Temperature: 28.80 °C
+      Differential pressure: -0.03 Pa
+      Temperature: 28.80 °C
+      Differential pressure: -0.03 Pa
       ...
       ```
 

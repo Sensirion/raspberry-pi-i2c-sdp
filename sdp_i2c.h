@@ -156,12 +156,13 @@ int16_t sdp_trigger_measurement_with_mass_flow_t_comp_and_averaging(void);
 int16_t sdp_trigger_measurement_with_diff_pressure_t_comp(void);
 
 /**
- * sdp_read_measurement() - After a start continuous measurement commands, the
- * measurement results can be read out at most every 0.5ms. After a triggered
- * measurement command, the results can be read out when the sensor is finished
- * with the measurement. The temperature and scale factor don’t need to be read
- * out (every time). The read sequence can be aborted by a NACK and a STOP
- * condition. The scale factor is for differential pressure in Pascal.
+ * sdp_read_measurement_raw() - After a start continuous measurement commands,
+ * the measurement results can be read out at most every 0.5ms. After a
+ * triggered measurement command, the results can be read out when the sensor is
+ * finished with the measurement. This method returns raw sensor values.
+ * The temperature and scale factor don’t need to be read out (every time).
+ * The read sequence can be aborted by a NACK and a
+ * STOP condition. The scale factor is for differential pressure in Pascal.
  *
  * @param differential_pressure The digital calibrated differential pressure
  * signal read from the sensor is a signed integer number (two's complement
@@ -178,8 +179,24 @@ int16_t sdp_trigger_measurement_with_diff_pressure_t_comp(void);
  *
  * @return 0 on success, an error code otherwise
  */
-int16_t sdp_read_measurement(int16_t* differential_pressure,
-                             int16_t* temperature, int16_t* scaling_factor);
+int16_t sdp_read_measurement_raw(int16_t* differential_pressure,
+                                 int16_t* temperature, int16_t* scaling_factor);
+
+/**
+ * sdp_read_measurement() - After a start continuous measurement commands, the
+ * measurement results can be read out at most every 0.5ms. After a triggered
+ * measurement command, the results can be read out when the sensor is finished
+ * with the measurement. This method returns the measurement values in physical
+ * units.
+ *
+ * @param differential_pressure measurement value for differential pressure in
+ * Pascal
+ *
+ * @param temperature measurement value for temperature in °C
+ *
+ * @return 0 on success, an error code otherwise
+ */
+int16_t sdp_read_measurement(float* differential_pressure, float* temperature);
 
 /**
  * sdp_enter_sleep_mode() - In sleep mode the sensor uses the minimum amount of

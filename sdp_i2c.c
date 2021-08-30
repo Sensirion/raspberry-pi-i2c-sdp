@@ -42,6 +42,11 @@
 #include "sensirion_i2c_hal.h"
 
 #define SDP_I2C_ADDRESS 0x25
+#define TEMPERATURE_DIVISION_FACTOR 200
+
+static float convert_temperature_raw_to_celsius(int16_t temperature_raw) {
+    return (float)temperature_raw / TEMPERATURE_DIVISION_FACTOR;
+}
 
 int16_t
 sdp_start_continuous_measurement_with_mass_flow_t_comp_and_averaging(void) {
@@ -143,8 +148,9 @@ int16_t sdp_trigger_measurement_with_diff_pressure_t_comp(void) {
     return NO_ERROR;
 }
 
-int16_t sdp_read_measurement(int16_t* differential_pressure,
-                             int16_t* temperature, int16_t* scaling_factor) {
+int16_t sdp_read_measurement_raw(int16_t* differential_pressure,
+                                 int16_t* temperature,
+                                 int16_t* scaling_factor) {
     int16_t error;
     uint8_t buffer[9];
 
@@ -155,6 +161,23 @@ int16_t sdp_read_measurement(int16_t* differential_pressure,
     *differential_pressure = sensirion_common_bytes_to_int16_t(&buffer[0]);
     *temperature = sensirion_common_bytes_to_int16_t(&buffer[2]);
     *scaling_factor = sensirion_common_bytes_to_int16_t(&buffer[4]);
+    return NO_ERROR;
+}
+
+int16_t sdp_read_measurement(float* differential_pressure, float* temperature) {
+    int16_t error;
+    int16_t differential_pressure_raw;
+    int16_t temperature_raw;
+    int16_t scaling_factor;
+
+    error = sdp_read_measurement_raw(&differential_pressure_raw,
+                                     &temperature_raw, &scaling_factor);
+    if (error) {
+        return error;
+    }
+
+    *differential_pressure = (float)differential_pressure_raw / scaling_factor;
+    *temperature = convert_temperature_raw_to_celsius(temperature_raw);
     return NO_ERROR;
 }
 
