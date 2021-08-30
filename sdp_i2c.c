@@ -190,14 +190,11 @@ int16_t sdp_enter_sleep_mode(void) {
 }
 
 int16_t sdp_exit_sleep_mode(void) {
-    int16_t error;
     uint8_t buffer[2];
     uint16_t offset = 0;
 
-    error = sensirion_i2c_write_data(SDP_I2C_ADDRESS, &buffer[0], offset);
-    if (error) {
-        return error;
-    }
+    sensirion_i2c_write_data(SDP_I2C_ADDRESS, &buffer[0], offset);
+    // ignore error, as wakeup is not acknowledged
     sensirion_i2c_hal_sleep_usec(2000);
     return NO_ERROR;
 }
