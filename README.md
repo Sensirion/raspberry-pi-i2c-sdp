@@ -27,6 +27,10 @@ the following pins to connect your Sdp:
 
 <center><img src="images/GPIO-Pinout-Diagram.png" width="900px"></center>
 
+### Setting sensor address ###
+
+Depending on whether you connect a SDP3x or SDP8xx configure the correct i2c address in sdp_i2c.h (SDP_I2C_ADDRESS).
+
 ### Raspberry Pi
 
 - [Install the Raspberry Pi OS on to your Raspberry Pi](https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up)
