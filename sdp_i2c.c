@@ -41,6 +41,8 @@
 #include "sensirion_i2c.h"
 #include "sensirion_i2c_hal.h"
 
+#define TEMPERATURE_DIVISION_FACTOR 200
+
 static float convert_temperature_raw_to_celsius(int16_t temperature_raw) {
     return (float)temperature_raw / TEMPERATURE_DIVISION_FACTOR;
 }

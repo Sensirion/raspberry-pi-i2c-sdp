@@ -53,8 +53,6 @@ extern "C" {
 
 #define SDP_I2C_ADDRESS SDP8XX_I2C_ADDRESS_0
 
-#define TEMPERATURE_DIVISION_FACTOR 200
-
 /**
  * sdp_start_continuous_measurement_with_mass_flow_t_comp_and_averaging() - This
  * command starts continuous measurements with mass flow temperature
