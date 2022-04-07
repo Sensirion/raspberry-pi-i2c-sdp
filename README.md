@@ -6,9 +6,9 @@ using the provided code.
 <center><img src="images/SDP8xx.png" width="250px"><img src="images/SDP3x.png" width="250px"></center>
 
 
-Click [here](https://www.sensirion.com/en/flow-sensors/differential-pressure-sensors/test-your-sdp3x-differential-pressure-sensor-with-the-evaluation-kit-ek-p4/) to learn more about the SDP3x Sensor Evaluation Kit.
+Click [here](https://sensirion.com/products/catalog/EK-P4/) to learn more about the SDP3x Sensor Evaluation Kit.
 
-Click [here](https://www.sensirion.com/en/flow-sensors/differential-pressure-sensors/evaluation-kit-for-sensors-of-the-sdp800-series/) to learn more about the SDP800 series Sensor Evaluation Kit.
+Click [here](https://sensirion.com/products/catalog/EK-P5/) to learn more about the SDP8xx series Sensor Evaluation Kit.
 
 
 ## Setup Guide
@@ -24,6 +24,8 @@ the following pins to connect your Sdp:
    GND    |        Pin 6
    SDA    |        Pin 3
    SCL    |        Pin 5
+
+<center><img src="images/sdp8xx-pinout.png" width="900px"></center>
 
 <center><img src="images/GPIO-Pinout-Diagram.png" width="900px"></center>
 
